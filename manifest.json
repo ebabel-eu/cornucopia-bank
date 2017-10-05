@@ -1,7 +1,7 @@
 {
-  "name": "My App",
+  "name": "Cornucopia Bank",
   "short_name": "My App",
-  "description": "My App description",
+  "description": "Prototype of loan management built with Polymer.",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
