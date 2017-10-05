@@ -39,6 +39,5 @@
 
   const store = Redux.createStore(reducer, initial, enhancer);
 
-  // Export the ReduxMixin
-  ReduxMixin = PolymerRedux(store);
+  const ReduxMixin = PolymerRedux(store);
 </script>

@@ -3,6 +3,7 @@
   "shell": "src/cornucopia-app.html",
   "fragments": [
     "src/cornucopia-loans.html",
+    "src/cornucopia-loan-offers.html",
     "src/cornucopia-error404.html"
   ],
   "sources": [

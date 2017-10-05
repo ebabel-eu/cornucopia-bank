@@ -1,0 +1,28 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="cornucopia-loan-offers">
+  <template>
+    <style>
+      :host {
+        display: block;
+
+        padding: 10px 20px;
+      }
+    </style>
+
+    <h1>Loan offers</h1>
+
+    <template is="dom-repeat" items=[[loanOffers]]>
+      <p>[[item.title]]</p>
+      <p>[[item.rateDescription]]</p>
+    </template>
+  </template>
+
+  <script>
+    class CornucopiaLoanOffers extends ReduxMixin(Polymer.Element) {
+      static get is() { return 'cornucopia-loan-offers'; }
+    }
+
+    window.customElements.define(CornucopiaLoanOffers.is, CornucopiaLoanOffers);
+  </script>
+</dom-module>

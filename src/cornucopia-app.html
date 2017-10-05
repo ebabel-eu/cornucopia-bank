@@ -19,6 +19,7 @@
 <link rel="import" href="redux-mixin.html">
 
 <link rel="lazy-import" href="cornucopia-loans.html">
+<link rel="lazy-import" href="cornucopia-loan-offers.html">
 <link rel="lazy-import" href="cornucopia-error404.html">
 
 <dom-module id="cornucopia-app">
@@ -62,12 +63,19 @@
       }
 
       .warning {
+        position: relative;
         color: red;
         font-weight: 600;
         background-color: lightyellow;
         padding: 20px 30px 30px;
         line-height: 1.25em;
         font-size: 1em;
+      }
+
+      .warning paper-icon-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
       }
     </style>
 
@@ -88,6 +96,7 @@
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="loans" href="[[rootPath]]loans">Loans</a>
+          <a name="loan-offers" href="[[rootPath]]loan-offers">Loan offers</a>
         </iron-selector>
       </app-drawer>
 
@@ -105,8 +114,9 @@
 
         <iron-collapse id="disclaimer" opened=true>
           <div class="warning">
+            <h2>DISCLAIMER</h2>
             <paper-icon-button icon="cornucopia-icons:close" on-click="toggleDisclaimer"></paper-icon-button>
-            DISCLAIMER: This website isn't a real bank, it's a programming exercise. The loans offered are not real.
+            <p>This website isn't a real bank, it's a programming exercise. The loans offered are not real.</p>
           </div>
         </iron-collapse>
 
@@ -120,6 +130,10 @@
             loan-offers-count="[[loanOffers.length]]"
             name="loans">
           </cornucopia-loans>
+          <cornucopia-loan-offers
+            loan-offers="[[loanOffers]]"
+            name="loan-offers">
+          </cornucopia-loan-offers>
           <cornucopia-error404 name="error404"></cornucopia-error404>
         </iron-pages>
       </app-header-layout>
@@ -127,7 +141,7 @@
   </template>
 
   <script>
-    class CornucopiaApp extends ReduxMixin(Polymer.Element) {
+    class CornucopiaApp extends Polymer.Element {
       static get is() { return 'cornucopia-app'; }
 
       static get properties() {
