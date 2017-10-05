@@ -10,29 +10,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
-<dom-module id="my-view1">
+<dom-module id="cornucopia-error404">
   <template>
     <style>
       :host {
         display: block;
 
-        padding: 10px;
+        padding: 10px 20px;
       }
     </style>
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+    Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a>
   </template>
 
   <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
+    class CornucopiaError404 extends Polymer.Element {
+      static get is() { return 'cornucopia-error404'; }
+      static get properties() {
+        return {
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+        };
+      }
     }
 
-    window.customElements.define(MyView1.is, MyView1);
+    window.customElements.define(CornucopiaError404.is, CornucopiaError404);
   </script>
 </dom-module>
