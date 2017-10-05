@@ -74,7 +74,7 @@
           <p class="card-light">*&nbsp;[[item.rateNote]]</p>
         </div>
         <div class="card-actions">
-          <paper-button>
+          <paper-button on-click="addLoan" data-id="[[item.id]]">
             Buy now
             <iron-icon icon="cornucopia-icons:chevron-right"></iron-icon>
           </paper-button>
@@ -86,6 +86,37 @@
   <script>
     class CornucopiaLoanOffers extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loan-offers'; }
+
+      addLoan(e) {
+        const id = e.currentTarget.dataId;
+        const loanOffers = store.getState().loanOffers.slice(0);
+        const offer = loanOffers.filter(loanOffer => loanOffer.id === id);
+        
+        this.loan = {
+          timestamp: Date.now(),
+          offer: offer[0],
+          transactions: [
+            {
+              description: 'Opening balance',
+              amount: -Math.abs(offer[0].maxAmount),
+              timestamp: Date.now(),
+            },
+          ],
+        };
+
+        this.dispatch({
+          type: 'ADD_LOAN',
+          loan: this.loan,
+        });
+
+        localStorage['loans'] = JSON.stringify(store.getState().loans);
+      }
+
+      constructor() {
+        super();
+
+        this.loan = {};
+      }
     }
 
     window.customElements.define(CornucopiaLoanOffers.is, CornucopiaLoanOffers);

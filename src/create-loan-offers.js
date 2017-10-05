@@ -1,4 +1,9 @@
 const createLoanOffers = () => {
+  const s4 = () => Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+  const guid = () => `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
+
   const randomRate = (minimum) => (Math.random() * (minimum/2)) + minimum;
   rateOffers = [randomRate(2), randomRate(4), randomRate(6)];
   rateOffers.sort();
@@ -9,6 +14,7 @@ const createLoanOffers = () => {
 
   const loanOffers = [
     {
+      id: guid(),
       title: 'Our best loan rate',
       description: 'Time limited offer until stocks last',
       rate: rateOffers[0] / 100,
@@ -21,6 +27,7 @@ const createLoanOffers = () => {
       image: '/images/cat1.jpg',
     },
     {
+      id: guid(),
       title: 'Car loan',
       description: 'Go further with your car loan',
       rate: rateOffers[1] / 100,
@@ -33,6 +40,7 @@ const createLoanOffers = () => {
       image: '/images/cat2.jpg',
     },
     {
+      id: guid(),
       title: 'Flexi-loan',
       description: 'Freedom to delay payments for up to 36 months',
       rate: rateOffers[2] / 100,

@@ -141,7 +141,7 @@
   </template>
 
   <script>
-    class CornucopiaApp extends Polymer.Element {
+    class CornucopiaApp extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-app'; }
 
       static get properties() {
@@ -153,6 +153,12 @@
           },
           routeData: Object,
           subroute: String,
+
+          loans: {
+            type: Array,
+            statePath: 'loans',
+          },
+
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
