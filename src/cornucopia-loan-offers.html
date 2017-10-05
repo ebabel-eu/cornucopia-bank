@@ -1,20 +1,84 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
 <dom-module id="cornucopia-loan-offers">
   <template>
-    <style>
+    <style is="custom-style">
       :host {
         display: block;
 
         padding: 10px 20px;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      paper-card {
+        max-width: 500px;
+        margin-bottom: 40px;
+      }
+
+      paper-card p {
+        margin: 0 0 1.25em;
+      }
+
+      .card-header h2 {
+        font-size: 1.5em;
+        font-weight: 200;
+        margin: 0;
+      }
+
+      .card-highlight {
+        float: right;
+        font-size: 2em;
+        margin: 0 20px 20px 40px;
+        font-weight: 600;
+      }
+
+      .card-highlight small {
+        font-weight: 200;
+        font-size: .5em;
+      }
+
+      .card-light {
+        font-size: .8em;
+        line-height: 1.25em;
+        color: var(--google-grey-500);
+      }
+
+      .card-actions {
+        color: var(--app-primary-color);
+        text-align: right;
       }
     </style>
 
     <h1>Loan offers</h1>
 
     <template is="dom-repeat" items=[[loanOffers]]>
-      <p>[[item.title]]</p>
-      <p>[[item.rateDescription]]</p>
+      <paper-card image="[[item.image]]">
+        <div class="card-content">
+          <div class="card-header">
+            <h2>[[item.title]]</h2>
+            <p>[[item.description]]</p>
+          </div>
+          <p class="card-highlight">
+            [[item.rateDescription]]
+            <small>APR*</small>
+          </p>
+          <p class="card-light">*&nbsp;[[item.rateNote]]</p>
+        </div>
+        <div class="card-actions">
+          <paper-button>
+            Purchase
+            <iron-icon icon="cornucopia-icons:chevron-right"></iron-icon>
+          </paper-button>
+        </div>
+      </paper-card>
     </template>
   </template>
 
