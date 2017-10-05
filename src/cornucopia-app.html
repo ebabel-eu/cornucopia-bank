@@ -1,26 +1,22 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+
 <link rel="import" href="cornucopia-icons.html">
+<link rel="import" href="redux-mixin.html">
 
 <link rel="lazy-import" href="cornucopia-loans.html">
 <link rel="lazy-import" href="cornucopia-error404.html">
@@ -29,8 +25,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        --app-primary-color: #009DFF;
+        --app-secondary-color: #030303;
 
         display: block;
       }
@@ -40,12 +36,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-header {
-        color: #fff;
+        color: #f5f5f5;
         background-color: var(--app-primary-color);
       }
 
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        --paper-icon-button-ink-color: #f5f5f5;
       }
 
       .drawer-list {
@@ -63,6 +59,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
+      }
+
+      .warning {
+        color: red;
+        font-weight: 600;
+        background-color: lightyellow;
+        padding: 20px 30px 30px;
+        line-height: 1.25em;
+        font-size: 1em;
       }
     </style>
 
@@ -92,16 +97,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="cornucopia-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Cornucopia Bank</div>
+            <div main-title>
+              Cornucopia Bank
+            </div>
           </app-toolbar>
         </app-header>
+
+        <iron-collapse id="disclaimer" opened=true>
+          <div class="warning">
+            <paper-icon-button icon="cornucopia-icons:close" on-click="toggleDisclaimer"></paper-icon-button>
+            DISCLAIMER: This website isn't a real bank, it's a programming exercise. The loans offered are not real.
+          </div>
+        </iron-collapse>
 
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
             fallback-selection="error404"
             role="main">
-          <cornucopia-loans name="loans"></cornucopia-loans>
+          <cornucopia-loans
+            loans="[[loans]]"
+            loan-offers-count="[[loanOffers.length]]"
+            name="loans">
+          </cornucopia-loans>
           <cornucopia-error404 name="error404"></cornucopia-error404>
         </iron-pages>
       </app-header-layout>
@@ -109,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class CornucopiaApp extends Polymer.Element {
+    class CornucopiaApp extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-app'; }
 
       static get properties() {
@@ -156,6 +174,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'error404';
+      }
+
+      toggleDisclaimer() {
+        this.$.disclaimer.toggle();
+      }
+
+      constructor() {
+        super();
+
+        const {
+          loanOffers,
+          loans,
+        } = store.getState();
+
+        this.loanOffers = loanOffers;
+        this.loans = loans;
       }
     }
 

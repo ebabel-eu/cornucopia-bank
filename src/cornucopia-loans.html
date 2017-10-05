@@ -16,18 +16,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
 
-        padding: 10px;
+        padding: 10px 20px;
       }
     </style>
 
-    <div>
-      <h1>Get a loan</h1>
+    <h1>Your loans</h1>
 
-    </div>
+    <template is="dom-if" if=[[!loans.length]]>
+      <p>You currently don't have any loan.</p>
+      <p>
+        We currently have
+        <strong>[[loanOffersCount]] fantastic</strong>
+        <a name="loan-offers" href="[[rootPath]]loan-offers">loan offers</a>
+        to choose from.
+      </p>
+    </template>
+
+    <template is="dom-if" if=[[loans.length]]>
+      <p>You have [[loans.length]] loans.</p>
+    </template>
   </template>
 
   <script>
-    class CornucopiaLoans extends Polymer.Element {
+    class CornucopiaLoans extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loans'; }
     }
 

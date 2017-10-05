@@ -1,0 +1,44 @@
+<link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+<script src="../node_modules/redux/dist/redux.js"></script>
+
+<script src="create-loan-offers.js"></script>
+
+<script>
+  const readStorage = (key) =>
+    (
+      localStorage[key]
+      && Array.isArray(JSON.parse(localStorage[key]))
+      && JSON.parse(localStorage[key])
+    ) || [];
+
+  const loans = readStorage('loans');
+  const loanOffers = (readStorage('loanOffers').length !== 0) ?
+    readStorage('loanOffers') : createLoanOffers();
+
+  // Setup a Redux store
+  const initial = {
+    loanOffers,
+    loans,
+  };
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'ADD_LOAN':
+        const loans = state.loans.slice(0);
+        loans.push(action.loan);
+        return Object.assign({}, state, { loans });
+      default:
+        return state;
+    }
+  };
+
+  // If Redux DevTools extension is installed in browser, include it in Redux store.
+  const enhancer = Redux.compose(
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
+  const store = Redux.createStore(reducer, initial, enhancer);
+
+  // Export the ReduxMixin
+  ReduxMixin = PolymerRedux(store);
+</script>
