@@ -27,6 +27,9 @@
         const loans = state.loans.slice(0);
         loans.push(action.loan);
         return Object.assign({}, state, { loans });
+      case 'RANDOM_RATES':
+        const loanOffers = createLoanOffers();
+        return Object.assign({}, state, { loanOffers });
       default:
         return state;
     }

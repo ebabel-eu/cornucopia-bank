@@ -2,6 +2,7 @@
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
 
 <dom-module id="cornucopia-loan-offers">
   <template>
@@ -53,12 +54,18 @@
       }
 
       .card-actions {
-        color: var(--app-primary-color);
         text-align: right;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      paper-button {
+        background: var(--app-primary-color);
+        color: var(--paper-grey-50);
       }
     </style>
 
-    <h1>Loan offers</h1>
+    <p><paper-button class="random-rates" raised on-click="randomRates">Random Rates Generator</paper-button></p>
 
     <template is="dom-repeat" items=[[loanOffers]]>
       <paper-card image="[[item.image]]">
@@ -74,7 +81,7 @@
           <p class="card-light">*&nbsp;[[item.rateNote]]</p>
         </div>
         <div class="card-actions">
-          <paper-button on-click="addLoan" data-id="[[item.id]]">
+          <paper-button raised on-click="addLoan" data-id="[[item.id]]">
             Buy now
             <iron-icon icon="cornucopia-icons:chevron-right"></iron-icon>
           </paper-button>
@@ -116,6 +123,12 @@
         });
 
         localStorage['loans'] = JSON.stringify(store.getState().loans);
+      }
+
+      randomRates() {
+        this.dispatch({
+          type: 'RANDOM_RATES',
+        });
       }
 
       constructor() {
