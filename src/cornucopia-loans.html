@@ -12,12 +12,26 @@
 
         padding: 10px 20px;
       }
+
+      h2 {
+        margin: 0;
+      }
+
+      h2 small {
+        font-weight: normal;
+        font-size: .5em;
+        vertical-align: top;
+      }
+
+      p {
+        margin: 0 0 1.25em;
+      }
     </style>
 
-    <h1>Your loans</h1>
-
     <template is="dom-if" if=[[!loans.length]]>
-      <p>You currently don't have any loan.</p>
+      <h1>No loans yet</h1>
+
+      <p>You don't have any loans yet.</p>
       <p>
         We currently have
         <strong>[[loanOffersCount]] fantastic</strong>
@@ -27,10 +41,12 @@
     </template>
 
     <template is="dom-if" if=[[loans.length]]>
-      <p>You have [[loans.length]] loans.</p>
+      <h1>Your loans</h1>
+      <p>Number of loans: [[loans.length]]</p>
 
       <template is="dom-repeat" items="[[loans]]">
-        <h2>[[item.offer.title]]</h2>
+        <h2>[[item.offer.title]]: [[item.offer.rateDescription]] <small>APR*</small></h2>
+        <p><small>*&nbsp;[[item.offer.rateNote]]</small></p>
         <vaadin-grid aria-label="Basic Binding Example" items="[[item.transactions]]">
           <vaadin-grid-column>
             <template class="header">Date</template>
@@ -41,8 +57,8 @@
             <template>[[item.description]]</template>
           </vaadin-grid-column>
           <vaadin-grid-column flex-grow="0">
-            <template class="header">Amount</template>
-            <template>[[item.amount]]</template>
+            <template class="header">&euro;</template>
+            <template>[[item.amountEnGb]]</template>
           </vaadin-grid-column>
         </vaadin-grid>
       </template>
