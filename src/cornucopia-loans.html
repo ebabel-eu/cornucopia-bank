@@ -1,8 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
-
-<link rel="import" href="../bower_components/vaadin-material-theme/vaadin-grid.html">
-<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/paper-collapse-item/paper-collapse-item.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="cornucopia-loans">
   <template>
@@ -26,6 +25,19 @@
       p {
         margin: 0 0 .5em;
       }
+
+      .loan {
+        margin: 0 0 40px;
+      }
+
+      paper-collapse-item {
+        color: var(--paper-blue-400);
+      }
+
+      paper-button {
+        background: var(--app-primary-color);
+        color: var(--paper-grey-50);
+      }
     </style>
 
     <template is="dom-if" if=[[!loans.length]]>
@@ -42,26 +54,21 @@
 
     <template is="dom-if" if=[[loans.length]]>
       <h1>Your loans</h1>
-      <p>Number of loans: [[loans.length]]</p>
-
       <template is="dom-repeat" items="[[loans]]">
-        <h2>[[item.offer.title]]: [[item.offer.rateDescription]] <small>APR*</small></h2>
-        <p>[[item.offer.description]]</p>
-        <p><small>*&nbsp;[[item.offer.rateNote]]</small></p>
-        <vaadin-grid aria-label="Basic Binding Example" items="[[item.transactions]]">
-          <vaadin-grid-column>
-            <template class="header">Date</template>
-            <template>[[item.dateEnGb]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">Description</template>
-            <template>[[item.description]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column flex-grow="0">
-            <template class="header">&euro;</template>
-            <template>[[item.amountEnGb]]</template>
-          </vaadin-grid-column>
-        </vaadin-grid>
+        <div class="loan">
+          <h2>[[item.offer.title]]: [[item.offer.rateDescription]]</h2>
+          <p>[[item.offer.description]]</p>
+          <template is="dom-repeat" items="[[item.transactions]]">
+            <paper-collapse-item header="&euro;[[item.amountEnGb]]">
+              <p><strong>[[item.description]]</strong></p>
+              <p>[[item.dateEnGb]]</p>
+            </paper-collapse-item>
+          </template>
+          <p><small>[[item.offer.rateNote]]</small></p>
+          <paper-button raised data-id="[[item.id]]" on-click="addMonth">
+            Add month
+          </paper-button>
+        </div>
       </template>
     </template>
   </template>
@@ -69,6 +76,16 @@
   <script>
     class CornucopiaLoans extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loans'; }
+
+      addMonth(e) {
+        const id = e.currentTarget.dataId;
+        const loans = store.getState().loans.slice(0);
+        const loan = loans.filter(loan => loan.id === id);
+
+        // todo: add an extra month to the loan transactions.
+
+        console.log(loan);
+      }
     }
 
     window.customElements.define(CornucopiaLoans.is, CornucopiaLoans);

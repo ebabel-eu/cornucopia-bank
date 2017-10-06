@@ -21,8 +21,7 @@
     "iron-collapse": "2.0.0",
     "paper-card": "polymerelements/paper-card#2.0.0",
     "paper-button": "polymerelements/paper-button#2.0.0",
-    "vaadin-material-theme": "vaadin/vaadin-material-theme#0.3.0",
-    "vaadin-grid": "vaadin/vaadin-grid#3.0.2"
+    "paper-collapse-item": "2.0.3"
   },
   "resolutions": {
     "polymer": "2.0.0"
