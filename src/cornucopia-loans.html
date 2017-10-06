@@ -24,7 +24,7 @@
       }
 
       p {
-        margin: 0 0 1.25em;
+        margin: 0 0 .5em;
       }
     </style>
 
@@ -46,6 +46,7 @@
 
       <template is="dom-repeat" items="[[loans]]">
         <h2>[[item.offer.title]]: [[item.offer.rateDescription]] <small>APR*</small></h2>
+        <p>[[item.offer.description]]</p>
         <p><small>*&nbsp;[[item.offer.rateNote]]</small></p>
         <vaadin-grid aria-label="Basic Binding Example" items="[[item.transactions]]">
           <vaadin-grid-column>
