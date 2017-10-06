@@ -9,47 +9,70 @@ const createLoanOffers = () => {
   rateOffers.sort();
 
   const percentageOffers = rateOffers.map(rateOffer => rateOffer.toFixed(2));
-  const aprNote = (minAmount, maxAmount, minYears, maxYears) =>
-    `% APR representative (fixed) on unsecured loans from €${minAmount} to €${maxAmount} for ${minYears} to ${maxYears} years. Terms and conditions apply. Subject to status. Dutch residents aged 18 to 79.`;
+
+  const adjectives = [ 'Amazing', 'Excellent', 'Awesome', 'Sensational', 'Unbelievable', 'Stupendous', 'Marvellous', 'Exciting', 'Spectacular', 'Phenomenal', 'Prodigious', 'Wondrous', 'Magical' ];
+  const randomTitle = () => {
+    const selection = adjectives[Math.floor(Math.random() * (adjectives.length - 1))];
+    adjectives.splice(adjectives.indexOf(selection), 1);
+    return `${selection} Loan`;
+  };
+
+  const randomMinAmount = () => Math.round((Math.random() * 500 + 1000) / 100) * 100;;
+  const randomMaxAmount = () => Math.round((Math.random() * 15000 + 5000) / 1000) * 1000;
+  const randomAmounts = [ [ randomMinAmount(), randomMaxAmount() ], [ randomMinAmount(), randomMaxAmount() ], [ randomMinAmount(), randomMaxAmount() ] ];
+
+  const randomYears = () => Math.floor(Math.random() * 20) + 5;
+  const maxYears = [ randomYears(), randomYears(), randomYears() ];
+
+  const rateNote = (index) =>
+    `${percentageOffers[index]}% APR representative (fixed) on unsecured loans. Terms and conditions apply. Subject to status. Dutch residents aged 18 to 79.`;
+
+  const description = (index) => {
+    const min = Intl.NumberFormat('en-gb').format(randomAmounts[index][0]);
+    const max = Intl.NumberFormat('en-gb').format(randomAmounts[index][1]);
+    const years = maxYears[index];
+
+    return `From €${min} to €${max} for 1 to ${years} years.`;
+  };
 
   const loanOffers = [
     {
       id: guid(),
-      title: 'Our best loan rate',
-      description: 'Time limited offer until stocks last',
+      title: randomTitle(),
+      description: description(0),
       rate: rateOffers[0] / 100,
       rateDescription: `${percentageOffers[0]}%`,
-      rateNote: `${percentageOffers[0]}${aprNote('7,500', '14,999', 1, 5)}`,
-      minAmount: 7500,
-      maxAmount: 14999,
+      rateNote: rateNote(0),
+      minAmount: randomAmounts[0][0],
+      maxAmount: randomAmounts[0][1],
       minYears: 1,
-      maxYears: 5,
+      maxYears: maxYears[0],
       image: '/images/cat1.jpg',
     },
     {
       id: guid(),
-      title: 'Car loan',
-      description: 'Go further with your car loan',
+      title: randomTitle(),
+      description: description(1),
       rate: rateOffers[1] / 100,
       rateDescription: `${percentageOffers[1]}%`,
-      rateNote: `${percentageOffers[1]}${aprNote('3,000', '5,000', 1, 10)}`,
-      minAmount: 3000,
-      maxAmount: 5000,
+      rateNote: rateNote(1),
+      minAmount: randomAmounts[1][0],
+      maxAmount: randomAmounts[1][1],
       minYears: 1,
-      maxYears: 10,
+      maxYears: maxYears[1],
       image: '/images/cat2.jpg',
     },
     {
       id: guid(),
-      title: 'Flexi-loan',
-      description: 'Freedom to delay payments for up to 36 months',
+      title: randomTitle(),
+      description: description(2),
       rate: rateOffers[2] / 100,
       rateDescription: `${percentageOffers[2]}%`,
-      rateNote: `${percentageOffers[2]}${aprNote('500', '2,000', 5, 20)}`,
-      minAmount: 500,
-      maxAmount: 2000,
-      minYears: 5,
-      maxYears: 20,
+      rateNote: rateNote(2),
+      minAmount: randomAmounts[2][0],
+      maxAmount: randomAmounts[2][1],
+      minYears: 1,
+      maxYears: maxYears[2],
       image: '/images/cat3.jpg',
     },
   ];
