@@ -5,7 +5,7 @@ const createLoanOffers = () => {
   const guid = () => `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
 
   const randomRate = (minimum) => (Math.random() * (minimum/2)) + minimum;
-  rateOffers = [randomRate(2), randomRate(4), randomRate(6)];
+  rateOffers = [randomRate(2), randomRate(3), randomRate(4)];
   rateOffers.sort();
 
   const percentageOffers = rateOffers.map(rateOffer => rateOffer.toFixed(2));
