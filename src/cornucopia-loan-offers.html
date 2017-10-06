@@ -91,7 +91,9 @@
         const id = e.currentTarget.dataId;
         const loanOffers = store.getState().loanOffers.slice(0);
         const offer = loanOffers.filter(loanOffer => loanOffer.id === id);
-        
+
+        const timestamp = Date.now();
+
         this.loan = {
           timestamp: Date.now(),
           offer: offer[0],
@@ -99,7 +101,9 @@
             {
               description: 'Opening balance',
               amount: -Math.abs(offer[0].maxAmount),
-              timestamp: Date.now(),
+              timestamp,
+              dateEnGb: new Date(timestamp).toLocaleString('en-gb'),
+              dateNlNl: new Date(timestamp).toLocaleString('nl-nl'),
             },
           ],
         };

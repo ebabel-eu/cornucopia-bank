@@ -1,6 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 
+<link rel="import" href="../bower_components/vaadin-material-theme/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+
 <dom-module id="cornucopia-loans">
   <template>
     <style>
@@ -25,6 +28,24 @@
 
     <template is="dom-if" if=[[loans.length]]>
       <p>You have [[loans.length]] loans.</p>
+
+      <template is="dom-repeat" items="[[loans]]">
+        <h2>[[item.offer.title]]</h2>
+        <vaadin-grid aria-label="Basic Binding Example" items="[[item.transactions]]">
+          <vaadin-grid-column>
+            <template class="header">Date</template>
+            <template>[[item.dateEnGb]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column>
+            <template class="header">Description</template>
+            <template>[[item.description]]</template>
+          </vaadin-grid-column>
+          <vaadin-grid-column flex-grow="0">
+            <template class="header">Amount</template>
+            <template>[[item.amount]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid>
+      </template>
     </template>
   </template>
 
