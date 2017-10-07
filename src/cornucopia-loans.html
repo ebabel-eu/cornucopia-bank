@@ -3,6 +3,8 @@
 <link rel="import" href="../bower_components/paper-collapse-item/paper-collapse-item.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="cornucopia-icons.html">
+
 <dom-module id="cornucopia-loans">
   <template>
     <style>
@@ -12,26 +14,53 @@
         padding: 10px 20px;
       }
 
-      h2 {
-        margin: 0;
+      .loan h1 {
+        margin: -20px -20px 10px;
+        background: var(--app-primary-color);
+        padding: 10px 20px 10px;
+        color: var(--paper-grey-50);
+        font-size: 20px;
+        font-weight: 200;
+        line-height: 1.5em;
+        text-align: right;
       }
 
-      h2 small {
-        font-weight: normal;
-        font-size: .5em;
-        vertical-align: top;
+      .loan h1 small {
+        font-size: .6em;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 400;
+      }
+
+      h2 iron-icon {
+        vertical-align: text-bottom;
       }
 
       p {
         margin: 0 0 .5em;
       }
 
+      .right {
+        text-align: right;
+      }
+
       .loan {
-        margin: 0 0 40px;
+        margin: 16px 0 40px;
+        background-color: var(--paper-blue-50);
+        padding: 20px;
+        display: block;
+        position: relative;
       }
 
       paper-collapse-item {
         color: var(--paper-blue-400);
+        cursor: pointer;
+      }
+
+      paper-collapse-item iron-icon {
+        margin-right: 0;
       }
 
       paper-button {
@@ -53,21 +82,30 @@
     </template>
 
     <template is="dom-if" if=[[loans.length]]>
-      <h1>Your loans</h1>
       <template is="dom-repeat" items="[[loans]]">
         <div class="loan">
-          <h2>[[item.offer.title]]: [[item.offer.rateDescription]]</h2>
-          <p>[[item.offer.description]]</p>
+          <h1>
+            <iron-icon icon="cornucopia-icons:account-balance"></iron-icon>
+            [[item.offer.title]] @ [[item.offer.rateDescription]]
+            <small>APR*</small>
+          </h1>
+          <p class="right">[[item.offer.description]]</p>
           <template is="dom-repeat" items="[[item.transactions]]">
-            <paper-collapse-item header="&euro;[[item.amountEnGb]]">
+            <paper-collapse-item icon="cornucopia-icons:euro-symbol" header="[[item.amountEnGb]]">
               <p><strong>[[item.description]]</strong></p>
               <p>[[item.dateEnGb]]</p>
             </paper-collapse-item>
           </template>
-          <p><small>[[item.offer.rateNote]]</small></p>
-          <paper-button raised data-id="[[item.id]]" on-click="addMonth">
-            Add month
-          </paper-button>
+          <h2>Balance: &euro;[[item.balanceEnGb]]</h2>
+          <p class="right">
+            <paper-button raised data-id="[[item.id]]" on-click="payInterest">
+              Pay interest only
+            </paper-button>
+            <paper-button raised data-id="[[item.id]]" on-click="payCapital">
+              Pay capital &amp; interest
+            </paper-button>
+          </p>
+          <p><small>*&nbsp;[[item.offer.rateNote]]</small></p>
         </div>
       </template>
     </template>
@@ -77,12 +115,25 @@
     class CornucopiaLoans extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loans'; }
 
-      addMonth(e) {
+      payInterest(e) {
         const id = e.currentTarget.dataId;
         const loans = store.getState().loans.slice(0);
-        const loan = loans.filter(loan => loan.id === id);
+        const loan = loans.filter(loan => loan.id === id)[0];
+        const timestamp = Date.now();
 
-        // todo: add an extra month to the loan transactions.
+        const amount = 6; // todo: see how to calculate this with amortization on https://www.thebalance.com/calculate-loan-interest-315532
+
+        const transaction = {
+          description: 'Interest only payment',
+          amount,
+          timestamp,
+          dateEnGb: new Date(timestamp).toLocaleString('en-gb'),
+          dateNlNl: new Date(timestamp).toLocaleString('nl-nl'),
+        };
+
+        loan.transactions.push(transaction);
+
+        // todo: add an interest payment transactions.
 
         console.log(loan);
       }

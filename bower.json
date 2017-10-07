@@ -21,7 +21,9 @@
     "iron-collapse": "2.0.0",
     "paper-card": "polymerelements/paper-card#2.0.0",
     "paper-button": "polymerelements/paper-button#2.0.0",
-    "paper-collapse-item": "2.0.3"
+    "paper-collapse-item": "2.0.3",
+    "paper-input": "2.0.2",
+    "iron-icons": "PolymerElements/iron-icons#2.0.1"
   },
   "resolutions": {
     "polymer": "2.0.0"
