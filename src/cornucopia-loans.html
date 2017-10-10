@@ -117,12 +117,14 @@
       static get is() { return 'cornucopia-loans'; }
 
       payInterest(e) {
-        const id = e.currentTarget.dataId;
+        const loanId = e.currentTarget.dataId;
         const loans = store.getState().loans.slice(0);
-        const loan = loans.filter(loan => loan.id === id)[0];
+        const loanToUpdate = loans.filter(loan => loan.id === loanId)[0];
         const timestamp = Date.now();
 
-        const amount = 6; // todo: see how to calculate this with amortization on https://www.thebalance.com/calculate-loan-interest-315532
+        // todo: see how to calculate amount with amortization on https://www.thebalance.com/calculate-loan-interest-315532
+        const monthlyRate = loanToUpdate.offer.rate / 12;
+        const amount = Math.abs(loanToUpdate.balance * monthlyRate);
 
         const transaction = {
           description: 'Interest only payment',
@@ -132,11 +134,19 @@
           dateNlNl: new Date(timestamp).toLocaleString('nl-nl'),
         };
 
-        loan.transactions.push(transaction);
+        this.dispatch({
+          type: 'ADD_TRANSACTION',
+          loanId,
+          transaction,
+        });
 
-        // todo: add an interest payment transactions.
+        this.dispatch({
+          type: 'UPDATE_LOAN_BALANCE',
+          loanId,
+          amount,
+        });
 
-        console.log(loan);
+        localStorage['loans'] = JSON.stringify(store.getState().loans);
       }
     }
 

@@ -21,15 +21,26 @@
     loans,
   };
 
+
   const reducer = (state, action) => {
+    const loans = state.loans.slice(0);
+
     switch (action.type) {
       case 'ADD_LOAN':
-        const loans = state.loans.slice(0);
         loans.push(action.loan);
         return Object.assign({}, state, { loans });
       case 'RANDOM_RATES':
         const loanOffers = createLoanOffers();
         return Object.assign({}, state, { loanOffers });
+      case 'ADD_TRANSACTION':
+        loans.filter(loan => loan.id === action.loanId)[0].transactions.push(action.transaction);
+        return Object.assign({}, state, { loans });
+      case 'UPDATE_LOAN_BALANCE':
+        const loanToUpdate = loans.filter(loan => loan.id === action.loanId)[0];
+        loanToUpdate.balance = loanToUpdate.balance + action.amount;
+        loanToUpdate.balanceEnGb = Intl.NumberFormat('en-gb').format(loanToUpdate.balance);
+        loanToUpdate.balanceNlNl = Intl.NumberFormat('nl-nl').format(loanToUpdate.balance);
+        return Object.assign({}, state, { loans });
       default:
         return state;
     }
