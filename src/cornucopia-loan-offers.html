@@ -4,6 +4,8 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 
+<link rel="import" href="guid.html">
+
 <dom-module id="cornucopia-loan-offers">
   <template>
     <style is="custom-style">
@@ -91,12 +93,6 @@
   </template>
 
   <script>
-    // todo: guid code is repeated, how can I not repeat it?
-    const s4 = () => Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-    const guid = () => `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
-
     class CornucopiaLoanOffers extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loan-offers'; }
 

@@ -1,0 +1,82 @@
+<link rel="import" href="guid.html">
+
+<script>
+  const createLoanOffers = () => {
+    const randomRate = (minimum) => (Math.random() * (minimum/2)) + minimum;
+    rateOffers = [randomRate(2), randomRate(3), randomRate(4)];
+    rateOffers.sort();
+
+    const percentageOffers = rateOffers.map(rateOffer => rateOffer.toFixed(2));
+
+    const adjectives = [ 'Amazing', 'Excellent', 'Awesome', 'Sensational', 'Unbelievable', 'Stupendous', 'Marvellous', 'Exciting', 'Spectacular', 'Phenomenal', 'Prodigious', 'Wondrous', 'Magical' ];
+    const randomTitle = () => {
+      const selection = adjectives[Math.floor(Math.random() * (adjectives.length - 1))];
+      adjectives.splice(adjectives.indexOf(selection), 1);
+      return `${selection} Loan`;
+    };
+
+    const randomMinAmount = () => Math.round((Math.random() * 500 + 1000) / 100) * 100;;
+    const randomMaxAmount = () => Math.round((Math.random() * 15000 + 5000) / 1000) * 1000;
+    const randomAmounts = [ [ randomMinAmount(), randomMaxAmount() ], [ randomMinAmount(), randomMaxAmount() ], [ randomMinAmount(), randomMaxAmount() ] ];
+
+    const randomYears = () => Math.floor(Math.random() * 20) + 5;
+    const maxYears = [ randomYears(), randomYears(), randomYears() ];
+
+    const rateNote = (index) =>
+      `${percentageOffers[index]}% APR representative (fixed) on unsecured loans. Terms and conditions apply. Subject to status. Dutch residents aged 18 to 79.`;
+
+    const description = (index) => {
+      const min = Intl.NumberFormat('en-gb').format(randomAmounts[index][0]);
+      const max = Intl.NumberFormat('en-gb').format(randomAmounts[index][1]);
+      const years = maxYears[index];
+
+      return `From €${min} to €${max} for 1 to ${years} years.`;
+    };
+
+    const loanOffers = [
+      {
+        id: guid(),
+        title: randomTitle(),
+        description: description(0),
+        rate: rateOffers[0] / 100,
+        rateDescription: `${percentageOffers[0]}%`,
+        rateNote: rateNote(0),
+        minAmount: randomAmounts[0][0],
+        maxAmount: randomAmounts[0][1],
+        minYears: 1,
+        maxYears: maxYears[0],
+        image: '/images/cat1.jpg',
+      },
+      {
+        id: guid(),
+        title: randomTitle(),
+        description: description(1),
+        rate: rateOffers[1] / 100,
+        rateDescription: `${percentageOffers[1]}%`,
+        rateNote: rateNote(1),
+        minAmount: randomAmounts[1][0],
+        maxAmount: randomAmounts[1][1],
+        minYears: 1,
+        maxYears: maxYears[1],
+        image: '/images/cat2.jpg',
+      },
+      {
+        id: guid(),
+        title: randomTitle(),
+        description: description(2),
+        rate: rateOffers[2] / 100,
+        rateDescription: `${percentageOffers[2]}%`,
+        rateNote: rateNote(2),
+        minAmount: randomAmounts[2][0],
+        maxAmount: randomAmounts[2][1],
+        minYears: 1,
+        maxYears: maxYears[2],
+        image: '/images/cat3.jpg',
+      },
+    ];
+
+    localStorage['loanOffers'] = JSON.stringify(loanOffers);
+
+    return loanOffers;
+  };
+</script>
