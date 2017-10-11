@@ -70,14 +70,14 @@
     </h1>
     <p class="right">[[loan.offer.description]]</p>
 
-    <template is="dom-repeat" items="[[loan.transactions]]">
+    <template is="dom-repeat" items="[[transactions]]">
       <paper-collapse-item icon="cornucopia-icons:euro-symbol" header="[[item.amountEnGb]]">
         <p><strong>[[item.description]]</strong></p>
         <p>[[item.dateEnGb]]</p>
       </paper-collapse-item>
     </template>
 
-    <h2>Balance: &euro;[[loan.balanceEnGb]]</h2>
+    <h2>Balance: &euro;[[balanceEnGb]]</h2>
     <p class="right">
       <paper-button raised data-id="[[loan.id]]" on-click="payInterest">
         Pay interest only
@@ -87,7 +87,6 @@
       </paper-button>
     </p>
     <p><small>*&nbsp;[[loan.offer.rateNote]]</small></p>
-
   </template>
 
   <script>
@@ -116,7 +115,13 @@
           amount: transaction.amount,
         });
 
+        // Persist data updates to localStorage.
         localStorage['loans'] = JSON.stringify(store.getState().loans);
+
+        // Update UI.
+        const loan = store.getState().loans.slice(0).filter(loan => loan.id === transaction.loanId)[0];
+        this.balanceEnGb = loan.balanceEnGb;
+        this.transactions = loan.transactions.slice(0);
       }
 
       payCapital(e) {
@@ -148,6 +153,13 @@
         };
 
         this.pay(transaction);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.balanceEnGb = this.loan.balanceEnGb;
+        this.transactions = this.loan.transactions;
       }
     }
 
