@@ -1,0 +1,156 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-collapse-item/paper-collapse-item.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="cornucopia-icons.html">
+
+<dom-module id="cornucopia-loan">
+  <template>
+    <style>
+      :host {
+        margin: 16px 0 40px;
+        background-color: var(--paper-blue-50);
+        padding: 20px;
+        display: block;
+        position: relative;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 400;
+      }
+
+      h2 iron-icon {
+        vertical-align: text-bottom;
+      }
+
+      p {
+        margin: 0 0 .5em;
+      }
+
+      h1 {
+        margin: -20px -20px 10px;
+        background: var(--app-primary-color);
+        padding: 10px 20px 10px;
+        color: var(--paper-grey-50);
+        font-size: 20px;
+        font-weight: 200;
+        line-height: 1.5em;
+        text-align: right;
+      }
+
+      h1 small {
+        font-size: .6em;
+      }
+
+      .right {
+        text-align: right;
+      }
+
+      paper-collapse-item {
+        color: var(--paper-blue-400);
+        cursor: pointer;
+      }
+
+      paper-collapse-item iron-icon {
+        margin-right: 0;
+      }
+
+      paper-button {
+        background: var(--app-primary-color);
+        color: var(--paper-grey-50);
+        margin-bottom: 10px;
+      }
+    </style>
+
+    <h1>
+      <iron-icon icon="cornucopia-icons:account-balance"></iron-icon>
+      [[loan.offer.title]] @ [[loan.offer.rateDescription]]
+      <small>APR*</small>
+    </h1>
+    <p class="right">[[loan.offer.description]]</p>
+
+    <template is="dom-repeat" items="[[loan.transactions]]">
+      <paper-collapse-item icon="cornucopia-icons:euro-symbol" header="[[item.amountEnGb]]">
+        <p><strong>[[item.description]]</strong></p>
+        <p>[[item.dateEnGb]]</p>
+      </paper-collapse-item>
+    </template>
+
+    <h2>Balance: &euro;[[loan.balanceEnGb]]</h2>
+    <p class="right">
+      <paper-button raised data-id="[[loan.id]]" on-click="payInterest">
+        Pay interest only
+      </paper-button>
+      <paper-button raised data-id="[[loan.id]]" on-click="payCapital">
+        Pay capital &amp; interest
+      </paper-button>
+    </p>
+    <p><small>*&nbsp;[[loan.offer.rateNote]]</small></p>
+
+  </template>
+
+  <script>
+    class CornucopiaLoan extends ReduxMixin(Polymer.Element) {
+      static get is() { return 'cornucopia-loan'; }
+
+      getLoanToUpdate(id) {
+        return store.getState().loans.slice(0).filter(loan => loan.id === id)[0];
+      }
+
+      pay(transaction) {
+        transaction.timestamp = Date.now();
+        transaction.dateEnGb = new Date(transaction.timestamp).toLocaleString('en-gb');
+        transaction.dateNlNl = new Date(transaction.timestamp).toLocaleString('nl-nl');
+        transaction.amountEnGb = new Intl.NumberFormat('en-gb').format(transaction.amount);
+        transaction.amountNlNl = new Intl.NumberFormat('nl-nl').format(transaction.amount);
+
+        this.dispatch({
+          type: 'ADD_TRANSACTION',
+          transaction,
+        });
+
+        this.dispatch({
+          type: 'UPDATE_LOAN_BALANCE',
+          loanId: transaction.loanId,
+          amount: transaction.amount,
+        });
+
+        localStorage['loans'] = JSON.stringify(store.getState().loans);
+      }
+
+      payCapital(e) {
+        const loanToUpdate = this.getLoanToUpdate(e.currentTarget.dataId)
+
+        // todo: this formula is made-up, I need the actual formula.
+        const amount = Math.abs(loanToUpdate.balance * loanToUpdate.offer.rate);
+
+        const transaction = {
+          loanId: e.currentTarget.dataId,
+          description: 'Capital & interest payment',
+          amount,
+        };
+
+        this.pay(transaction);
+      }
+
+      payInterest(e) {
+        const loanToUpdate = this.getLoanToUpdate(e.currentTarget.dataId)
+
+        // todo: see how to calculate amount with amortization on https://www.thebalance.com/calculate-loan-interest-315532
+        const monthlyRate = loanToUpdate.offer.rate / 12;
+        const amount = Math.abs(loanToUpdate.balance * monthlyRate);
+
+        const transaction = {
+          loanId: e.currentTarget.dataId,
+          description: 'Interest only payment',
+          amount,
+        };
+
+        this.pay(transaction);
+      }
+    }
+
+    window.customElements.define(CornucopiaLoan.is, CornucopiaLoan);
+  </script>
+</dom-module>
