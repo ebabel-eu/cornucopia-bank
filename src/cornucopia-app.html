@@ -159,11 +159,13 @@
           loans: {
             type: Array,
             statePath: 'loans',
+            value: () => [],
           },
 
           loanOffers: {
             type: Array,
             statePath: 'loanOffers',
+            value: () => [],
           },
 
           // This shouldn't be neccessary, but the Analyzer isn't picking up
