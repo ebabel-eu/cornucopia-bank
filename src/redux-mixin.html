@@ -33,7 +33,7 @@
         const loanOffers = createLoanOffers();
         return Object.assign({}, state, { loanOffers });
       case 'ADD_TRANSACTION':
-        loans.filter(loan => loan.id === action.loanId)[0].transactions.push(action.transaction);
+        loans.filter(loan => loan.id === action.transaction.loanId)[0].transactions.push(action.transaction);
         return Object.assign({}, state, { loans });
       case 'UPDATE_LOAN_BALANCE':
         const loanToUpdate = loans.filter(loan => loan.id === action.loanId)[0];

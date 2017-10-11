@@ -110,18 +110,20 @@
           balance: -Math.abs(offer[0].maxAmount),
           balanceEnGb: new Intl.NumberFormat('en-gb').format(-Math.abs(offer[0].maxAmount)),
           balanceNlNl: new Intl.NumberFormat('en-nl').format(-Math.abs(offer[0].maxAmount)),
-          transactions: [
-            {
-              description: 'Opening balance',
-              amount: -Math.abs(offer[0].maxAmount),
-              amountEnGb: new Intl.NumberFormat('en-gb').format(-Math.abs(offer[0].maxAmount)),
-              amountNlNl: new Intl.NumberFormat('en-nl').format(-Math.abs(offer[0].maxAmount)),
-              timestamp,
-              dateEnGb: new Date(timestamp).toLocaleString('en-gb'),
-              dateNlNl: new Date(timestamp).toLocaleString('nl-nl'),
-            },
-          ],
         };
+
+        this.loan.transactions = [
+          {
+            loanId: this.loan.id,
+            description: 'Opening balance',
+            amount: -Math.abs(offer[0].maxAmount),
+            amountEnGb: new Intl.NumberFormat('en-gb').format(-Math.abs(offer[0].maxAmount)),
+            amountNlNl: new Intl.NumberFormat('en-nl').format(-Math.abs(offer[0].maxAmount)),
+            timestamp,
+            dateEnGb: new Date(timestamp).toLocaleString('en-gb'),
+            dateNlNl: new Date(timestamp).toLocaleString('nl-nl'),
+          },
+        ];
 
         this.dispatch({
           type: 'ADD_LOAN',

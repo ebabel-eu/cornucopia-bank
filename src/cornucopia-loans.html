@@ -116,37 +116,60 @@
     class CornucopiaLoans extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loans'; }
 
+      getLoanToUpdate(id) {
+        return store.getState().loans.slice(0).filter(loan => loan.id === id)[0];
+      }
+
+      pay(transaction) {
+        transaction.timestamp = Date.now();
+        transaction.dateEnGb = new Date(transaction.timestamp).toLocaleString('en-gb');
+        transaction.dateNlNl = new Date(transaction.timestamp).toLocaleString('nl-nl');
+        transaction.amountEnGb = new Intl.NumberFormat('en-gb').format(transaction.amount);
+        transaction.amountNlNl = new Intl.NumberFormat('nl-nl').format(transaction.amount);
+
+        this.dispatch({
+          type: 'ADD_TRANSACTION',
+          transaction,
+        });
+
+        this.dispatch({
+          type: 'UPDATE_LOAN_BALANCE',
+          loanId: transaction.loanId,
+          amount: transaction.amount,
+        });
+
+        localStorage['loans'] = JSON.stringify(store.getState().loans);
+      }
+
+      payCapital(e) {
+        const loanToUpdate = this.getLoanToUpdate(e.currentTarget.dataId)
+
+        // todo: this formula is made-up, I need the actual formula.
+        const amount = Math.abs(loanToUpdate.balance * loanToUpdate.offer.rate);
+
+        const transaction = {
+          loanId: e.currentTarget.dataId,
+          description: 'Capital &amp; interest payment',
+          amount,
+        };
+
+        this.pay(transaction);
+      }
+
       payInterest(e) {
-        const loanId = e.currentTarget.dataId;
-        const loans = store.getState().loans.slice(0);
-        const loanToUpdate = loans.filter(loan => loan.id === loanId)[0];
-        const timestamp = Date.now();
+        const loanToUpdate = this.getLoanToUpdate(e.currentTarget.dataId)
 
         // todo: see how to calculate amount with amortization on https://www.thebalance.com/calculate-loan-interest-315532
         const monthlyRate = loanToUpdate.offer.rate / 12;
         const amount = Math.abs(loanToUpdate.balance * monthlyRate);
 
         const transaction = {
+          loanId: e.currentTarget.dataId,
           description: 'Interest only payment',
           amount,
-          timestamp,
-          dateEnGb: new Date(timestamp).toLocaleString('en-gb'),
-          dateNlNl: new Date(timestamp).toLocaleString('nl-nl'),
         };
 
-        this.dispatch({
-          type: 'ADD_TRANSACTION',
-          loanId,
-          transaction,
-        });
-
-        this.dispatch({
-          type: 'UPDATE_LOAN_BALANCE',
-          loanId,
-          amount,
-        });
-
-        localStorage['loans'] = JSON.stringify(store.getState().loans);
+        this.pay(transaction);
       }
     }
 
