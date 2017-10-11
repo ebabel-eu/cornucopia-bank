@@ -91,7 +91,7 @@ application. Each new demand-loaded fragment should be added to the list of
 components and their dependencies are added to the list of pre-cached components
 and will be included in the build.
 
-### Document generation
+### Documentation generation
 
 `cd` to the root of the project.
 
