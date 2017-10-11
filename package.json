@@ -1,6 +1,6 @@
 {
   "name": "cornucopia-bank",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Prototype of loan management built with Polymer.",
   "license": "BSD-3-Clause",
   "repository": "https://github.com/ebabel-eu/cornucopia-bank",
