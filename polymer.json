@@ -2,9 +2,15 @@
   "entrypoint": "index.html",
   "shell": "src/cornucopia-app.html",
   "fragments": [
-    "src/cornucopia-loans.html",
+    "src/cornucopia-app.html",
+    "src/cornucopia-error404.html",
+    "src/cornucopia-icons.html",
+    "src/cornucopia-loan.html",
     "src/cornucopia-loan-offers.html",
-    "src/cornucopia-error404.html"
+    "src/cornucopia-loans.html",
+    "src/create-loan-offers.html",
+    "src/guid.html",
+    "src/redux-mixin.html"
   ],
   "sources": [
     "src/**/*",

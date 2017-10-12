@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/paper-progress-button/paper-progress-button.html">
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -84,6 +85,16 @@
           <p class="card-light">*&nbsp;[[item.rateNote]]</p>
         </div>
         <div class="card-actions">
+          <paper-progress-button
+            active="[[active]]"
+            active-text="Buy now"
+            inactive-text="Loan setup..."
+            raised
+            data-id="[[item.id]]"
+            on-click="addLoan"
+          >
+          </paper-progress-button>
+
           <paper-button raised on-click="addLoan" data-id="[[item.id]]">
             Buy now
             <iron-icon icon="cornucopia-icons:chevron-right"></iron-icon>
@@ -98,6 +109,8 @@
       static get is() { return 'cornucopia-loan-offers'; }
 
       addLoan(e) {
+        this.active = false;
+
         const id = e.currentTarget.dataId;
         const loanOffers = store.getState().loanOffers.slice(0);
         const offer = loanOffers.filter(loanOffer => loanOffer.id === id);
@@ -132,6 +145,10 @@
         });
 
         localStorage['loans'] = JSON.stringify(store.getState().loans);
+
+        setTimeout(() => {
+          this.active = true;
+        }, 500);
       }
 
       randomRates() {
