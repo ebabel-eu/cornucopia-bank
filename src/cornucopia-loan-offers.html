@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/paper-progress-button/paper-progress-button.html">
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 
 <link rel="import" href="guid.html">
@@ -67,6 +66,11 @@
         background: var(--app-primary-color);
         color: var(--paper-grey-50);
       }
+
+      paper-progress-button {
+        --paper-progress-button-button: var(--app-primary-color);
+        --paper-progress-button-button-active: var(--app-primary-color);
+      }
     </style>
 
     <p><paper-button class="random-rates" raised on-click="randomRates">Random Rates Generator</paper-button></p>
@@ -94,11 +98,6 @@
             on-click="addLoan"
           >
           </paper-progress-button>
-
-          <paper-button raised on-click="addLoan" data-id="[[item.id]]">
-            Buy now
-            <iron-icon icon="cornucopia-icons:chevron-right"></iron-icon>
-          </paper-button>
         </div>
       </paper-card>
     </template>
@@ -148,7 +147,8 @@
 
         setTimeout(() => {
           this.active = true;
-        }, 500);
+          document.querySelector('cornucopia-app').set('route.path', '/loans');
+        }, 300);
       }
 
       randomRates() {
