@@ -6,8 +6,6 @@
     rateOffers = [randomRate(2), randomRate(3), randomRate(4)];
     rateOffers.sort();
 
-    const percentageOffers = rateOffers.map(rateOffer => rateOffer.toFixed(2));
-
     const adjectives = [ 'Amazing', 'Excellent', 'Awesome', 'Sensational', 'Unbelievable', 'Stupendous', 'Marvellous', 'Exciting', 'Spectacular', 'Phenomenal', 'Prodigious', 'Wondrous', 'Magical' ];
     const randomTitle = () => {
       const selection = adjectives[Math.floor(Math.random() * (adjectives.length - 1))];
@@ -39,7 +37,6 @@
         title: randomTitle(),
         description: description(0),
         rate: rateOffers[0] / 100,
-        rateDescription: `${percentageOffers[0]}%`,
         rateNote: rateNote(0),
         minAmount: randomAmounts[0][0],
         maxAmount: randomAmounts[0][1],
@@ -52,7 +49,6 @@
         title: randomTitle(),
         description: description(1),
         rate: rateOffers[1] / 100,
-        rateDescription: `${percentageOffers[1]}%`,
         rateNote: rateNote(1),
         minAmount: randomAmounts[1][0],
         maxAmount: randomAmounts[1][1],
@@ -65,7 +61,6 @@
         title: randomTitle(),
         description: description(2),
         rate: rateOffers[2] / 100,
-        rateDescription: `${percentageOffers[2]}%`,
         rateNote: rateNote(2),
         minAmount: randomAmounts[2][0],
         maxAmount: randomAmounts[2][1],

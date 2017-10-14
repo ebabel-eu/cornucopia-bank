@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="cornucopia-icons.html">
+<link rel="import" href="localize-number.html">
 
 <dom-module id="cornucopia-loan">
   <template>
@@ -66,7 +67,7 @@
 
     <h1>
       <iron-icon icon="cornucopia-icons:account-balance"></iron-icon>
-      [[loan.offer.title]] @ [[loan.offer.rateDescription]]
+      [[loan.offer.title]] @ [[rateLocalized]]
       <small>APR*</small>
     </h1>
     <p class="right">[[loan.offer.description]]</p>
@@ -93,6 +94,20 @@
   <script>
     class CornucopiaLoan extends ReduxMixin(Polymer.Element) {
       static get is() { return 'cornucopia-loan'; }
+
+      static get properties() {
+        return {
+          rateLocalized: {
+            type: String,
+            computed: 'localizeRate(loan)',
+          },
+        };
+      }
+
+      localizeRate(loan) {
+        const localizedRate = localizeNumber(loan.offer.rate * 100);
+        return `${localizedRate}%`;
+      }
 
       getLoanToUpdate(id) {
         return store.getState().loans.slice(0).filter(loan => loan.id === id)[0];

@@ -1,0 +1,15 @@
+<script>
+  const localizeNumber = (input) => {
+    if (isNaN(input)) {
+      return input;
+    }
+
+    // Set the number of decimals after the dot.
+    // Note: if input is a string, Math.round will convert it to an actual number.
+    // Performance comparison: Math.round is fastest, see https://jsperf.com/parsefloat-tofixed-vs-math-round
+    const rounded = Math.round(input * 100) / 100;
+
+    // Localize to en-GB but once multiple languages are supported, en-GB won't be hard-coded.
+    return Intl.NumberFormat('en-gb').format(rounded);
+  };
+</script>
