@@ -21,7 +21,7 @@
     const maxYears = [ randomYears(), randomYears(), randomYears() ];
 
     const rateNote = (index) =>
-      `${percentageOffers[index]}% APR representative (fixed) on unsecured loans. Terms and conditions apply. Subject to status. Dutch residents aged 18 to 79.`;
+      `${rateOffers[index]}% APR representative (fixed) on unsecured loans. Terms and conditions apply. Subject to status. Dutch residents aged 18 to 79.`;
 
     const description = (index) => {
       const min = Intl.NumberFormat('en-gb').format(randomAmounts[index][0]);
